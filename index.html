@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Misión FYQ 3.º ESO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#0B1730;--p:#3685F5;--t:#20C7B5;--g:#34C78A;--o:#F3A847;--w:#F8FAFC;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 20% 10%,#16336b,var(--bg) 60%);color:var(--w);font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:clamp(13px,1.35vw,19px);overflow:hidden}
+#app{height:100%;display:grid;grid-template-rows:56px 1fr 56px}
+.bar{display:flex;align-items:center;gap:8px;padding:0 12px;background:rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.12)}
+.bar.b{border-top:1px solid rgba(255,255,255,.12);border-bottom:0;justify-content:center}
+.logo{font-weight:800;color:var(--t);letter-spacing:.5px;white-space:nowrap}.sp{flex:1}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:8px 14px;background:var(--p);color:#fff;font-weight:600}
+button:hover{filter:brightness(1.15)}button:disabled{opacity:.35;cursor:default}button:focus-visible,.fc:focus-visible{outline:3px solid var(--o)}
+.g{background:var(--g);color:#052}.o{background:var(--o);color:#321}.n{background:rgba(255,255,255,.14)}
+.tabs button{background:rgba(255,255,255,.1);border-radius:10px 10px 0 0}.tabs button.on{background:var(--t);color:#032}
+main{min-height:0;padding:10px 14px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.two{flex:1;min-height:0;display:flex;gap:10px}.pn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px;min-height:0;min-width:0;overflow:auto;backdrop-filter:blur(6px)}
+h2{margin:0 0 6px;color:var(--t);font-size:1.35em}p{margin:4px 0;line-height:1.4}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.fc{perspective:800px;height:150px;cursor:pointer}.fi{position:relative;width:100%;height:100%;transition:transform .65s;transform-style:preserve-3d}.fc.f .fi{transform:rotateY(180deg)}
+.fa,.fb{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:8px;overflow:auto;text-align:center;font-size:.9em}
+.fa{background:linear-gradient(135deg,var(--p),var(--t));display:flex;flex-direction:column;align-items:center;justify-content:center}.fa b{font-size:2.6em}
+.fb{transform:rotateY(180deg);background:#12306a;border:2px solid var(--t);text-align:left}
+.opt{display:block;width:100%;text-align:left;margin:4px 0;background:rgba(255,255,255,.12)}.opt.on{background:var(--p);outline:2px solid var(--w)}
+input,select{font:inherit;padding:8px;border-radius:8px;border:1px solid #567;background:#0d2145;color:var(--w);width:100%}
+.fb1{padding:8px;border-radius:10px;margin-top:6px}.ok{background:rgba(52,199,138,.25);border:1px solid var(--g)}.ko{background:rgba(243,168,71,.25);border:1px solid var(--o)}.hn{background:rgba(54,133,245,.25)}
+.home{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;min-height:0}.mc{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:4px;cursor:pointer;transition:transform .2s}.mc:hover{transform:translateY(-4px);border-color:var(--t)}.mc span{font-size:2.2em}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid rgba(255,255,255,.25);padding:4px 6px}
+canvas{width:100%;height:100%;display:block}.side{position:fixed;right:0;top:56px;bottom:56px;width:min(300px,90vw);background:#0d2145;border-left:2px solid var(--t);padding:10px;overflow:auto;z-index:9}
+.side button{display:block;width:100%;margin:4px 0}.big{font-size:1.4em;font-weight:700}svg text{font-family:system-ui,sans-serif}
+@media (prefers-reduced-motion:reduce){.fi{transition:none}.mc{transition:none}}
+.rm *{transition:none!important}
+</style></head><body><div id="app"></div>
+<script>
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)];
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=R(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const fmt=x=>String(+(+x).toFixed(3)).replace('.',',');
+const Q=(q,o,a,e,h,tag)=>({q,o,a,e,h:h||['Piensa qué propiedad o idea se pide.','Recuerda la teoría de la misión.','Descarta las opciones que no cumplen la definición.'],tag});
+const MC=(q,c,w,e,h,tag,extra)=>{const o=sh([c,...w]);return Object.assign(Q(q,o,o.indexOf(c),e,h,tag),extra||{})};
+const TF=(q,v,e,tag)=>Q(q,['Verdadero','Falso'],v?0:1,e,0,tag);
+const MN=['Estado gaseoso y teoría cinética','Leyes de los gases','Ecuación de los gases ideales','Disoluciones','Concentración de una disolución','Problemas razonados','Gran desafío final'];
+const MI=['🎈','📉','🧮','🧂','🧪','🧠','🏆'];
+const CD={Presión:['Fuerza por unidad de superficie que ejerce el gas sobre las paredes. Unidades: Pa y atm.','Un neumático inflado.'],Volumen:['Espacio que ocupa el gas. Unidades: m³ y L.','El aire de una jeringa.'],Temperatura:['Relacionada con la agitación de las partículas. En las leyes, siempre en K: T(K) = t(°C) + 273.','20 °C = 293 K.'],'Gas ideal':['Modelo: partículas diminutas y muy separadas, choques elásticos y sin interacción entre choques.','Se cumple bien a baja presión.'],'Boyle-Mariotte':['T constante: P·V = cte; P₁V₁ = P₂V₂ (relación inversa).','Comprimir una jeringa tapada.'],Charles:['P constante: V/T = cte; V₁/T₁ = V₂/T₂ (directa).','Un globo al calentarse.'],'Gay-Lussac':['V constante: P/T = cte; P₁/T₁ = P₂/T₂ (directa).','Un bote cerrado al calentarse.'],Disolución:['Mezcla homogénea de dos o más sustancias en proporción variable.','Agua con sal.'],Soluto:['Sustancia que se disuelve; suele estar en menor proporción.','La sal en el agua salada.'],Disolvente:['Sustancia que disuelve al soluto; suele estar en mayor proporción.','El agua en las disoluciones acuosas.'],Diluida:['Contiene poco soluto disuelto.','Agua con una pizca de sal.'],Concentrada:['Contiene mucho soluto disuelto.','Un café muy cargado.'],Saturada:['Contiene la máxima cantidad de soluto que se disuelve a esa temperatura.','Si añades más, queda sin disolver.'],Concentración:['Relación entre la cantidad de soluto y la de disolución: %m, %V o g/L.','Vinagre al 3 % en masa.']};
+const cards=n=>n.map(k=>`<div class=fc tabindex=0 role=button onclick="this.classList.toggle('f')" onkeydown="if(event.key==='Enter')this.classList.toggle('f')"><div class=fi><div class=fa><b>?</b><small>Pulsa para descubrir</small></div><div class=fb><b>${k}</b><br>${CD[k][0]}<br><i>Ej.: ${CD[k][1]}</i></div></div></div>`).join('');
+const L=[
+[{t:'El estado gaseoso',x:'Un gas se describe con tres magnitudes:<table><tr><th>Magnitud</th><th>SI</th><th>Otras</th></tr><tr><td>Presión P</td><td>Pa</td><td>atm</td></tr><tr><td>Volumen V</td><td>m³</td><td>L (1 L = 1000 mL)</td></tr><tr><td>Temperatura T</td><td>K</td><td>°C</td></tr></table><p class=big>T(K) = t(°C) + 273</p>Ejemplo: 20 °C → 293 K.',c:['Presión','Volumen','Temperatura']},
+{t:'Teoría cinética de los gases',x:'Modelo de gas ideal: partículas muy separadas que se mueven continuamente en todas direcciones y en línea recta entre choques. Los choques son elásticos (se conserva la energía cinética). Se desprecian su tamaño y su interacción.<p>Los choques contra las paredes originan la <b>presión</b>. A más temperatura, mayor energía cinética y rapidez media. El gas ocupa todo el recipiente y se comprime porque hay mucho espacio vacío.</p>',c:['Gas ideal']}],
+[{t:'Ley de Boyle-Mariotte',x:'<b>Condiciones:</b> temperatura constante y misma cantidad de gas. P y V son inversamente proporcionales: si V disminuye, P aumenta.<p class=big>P₁·V₁ = P₂·V₂</p>Misma unidad de presión y de volumen en los dos estados.',c:['Boyle-Mariotte']},
+{t:'Ley de Gay-Lussac',x:'<b>Condiciones:</b> volumen constante y misma cantidad de gas. P es directamente proporcional a T: si T sube, P sube.<p class=big>P₁/T₁ = P₂/T₂</p>Temperatura siempre en kelvin.',c:['Gay-Lussac']},
+{t:'Ley de Charles',x:'<b>Condiciones:</b> presión constante y misma cantidad de gas. V es directamente proporcional a T: si T sube, V aumenta.<p class=big>V₁/T₁ = V₂/T₂</p>Temperatura siempre en kelvin.',c:['Charles']},
+{t:'Resumen',x:'<table><tr><th>Ley</th><th>Constante</th><th>Fórmula</th></tr><tr><td>Boyle-Mariotte</td><td>T</td><td>P₁V₁ = P₂V₂</td></tr><tr><td>Gay-Lussac</td><td>V</td><td>P₁/T₁ = P₂/T₂</td></tr><tr><td>Charles</td><td>P</td><td>V₁/T₁ = V₂/T₂</td></tr></table><p>Recuerda: T en kelvin y la misma unidad en los dos estados.</p>'}],
+[{t:'Ecuación de los gases ideales',x:'<p class=big>P·V = n·R·T</p>P en atm · V en L · n en mol · T en K · R = 0,082 atm·L/(mol·K).<p>Despejes: n = PV/(RT) · V = nRT/P · P = nRT/V · T = PV/(nR)</p>',c:['Gas ideal']},
+{t:'Método',x:'1. Escribe los datos. 2. Convierte: mL → L (÷1000) y °C → K (+273). 3. Despeja la incógnita. 4. Sustituye con unidades. 5. Calcula y escribe la unidad. Si T sale en K y piden °C, resta 273.'}],
+[{t:'¿Qué es una disolución?',x:'Mezcla <b>homogénea</b> de dos o más sustancias en proporción variable; no distinguimos sus componentes. El <b>soluto</b> se disuelve (suele estar en menor proporción) y el <b>disolvente</b> lo disuelve (mayor proporción). En las disoluciones acuosas, el disolvente es el agua.',c:['Disolución','Soluto','Disolvente']},
+{t:'Según la cantidad de soluto',x:'<b>Diluida</b>: poco soluto. <b>Concentrada</b>: mucho soluto. <b>Saturada</b>: la máxima cantidad que se disuelve a esa temperatura; si añadimos más, queda sin disolver.',c:['Diluida','Concentrada','Saturada']}],
+[{t:'La concentración',x:'Relaciona la cantidad de soluto con la cantidad de disolución.<p class=big>%m = m soluto / m disolución × 100</p><p class=big>%V = V soluto / V disolución × 100</p><p class=big>c = m soluto / V disolución (g/L)</p>',c:['Concentración']},
+{t:'Cuidado con…',x:'En %m y %V, misma unidad arriba y abajo. La masa de la disolución = soluto + disolvente (no solo el agua). Para g/L, el volumen en litros: 1 L = 1000 mL = 1000 cm³.'}],
+[{t:'Cómo resolver problemas',x:'Identifica la ley (¿qué magnitud es constante?). Convierte unidades. Escribe la ley, despeja, sustituye y razona el resultado. Errores típicos: usar °C en vez de K, mezclar mL y L, usar solo la masa del disolvente como masa de la disolución.'}],
+[{t:'Gran desafío final',x:'Mezcla de todas las misiones. En Practica elige RETO RÁPIDO (6), NORMAL (12) o COMPLETO (20).'}]];
+const B0=[MC('¿Cuál es la unidad de presión en el SI?','Pascal (Pa)',['Atmósfera','Litro','Kelvin'],'La atmósfera también se usa, pero la unidad SI es el pascal.',0,'Gases'),
+MC('¿Cuánto son 27 °C en kelvin?','300 K',['246 K','27 K','373 K'],'T(K) = 27 + 273 = 300 K.',0,'Gases'),
+MC('La presión de un gas se debe a…','los choques de las partículas contra las paredes',['el peso del gas','la atracción entre partículas','su color'],'Más choques o más intensos, más presión.',0,'Gases'),
+MC('En el modelo de gas ideal los choques son…','elásticos',['inelásticos','imposibles'],'Se conserva la energía cinética total.',0,'Gases'),
+MC('Al aumentar la temperatura de un gas, la rapidez media de sus partículas…','aumenta',['disminuye','no cambia'],'Más temperatura, más energía cinética media.',0,'Gases'),
+MC('Un gas se puede comprimir porque…','hay mucho espacio vacío entre sus partículas',['las partículas se aplastan','las partículas desaparecen'],'Las partículas están muy separadas.',0,'Gases'),
+TF('Entre choques, las partículas de un gas se mueven en línea recta.',1,'Así es en el modelo de gas ideal.','Gases'),
+TF('En el modelo de gas ideal se tiene en cuenta el tamaño de las partículas.',0,'Se desprecian su tamaño y su interacción.','Gases'),
+MC('1 L equivale a…','1000 mL',['100 mL','10 mL','10 000 mL'],'1 L = 1000 mL.',0,'Gases')];
+const B3=[MC('Una disolución es una mezcla…','homogénea de dos o más sustancias',['heterogénea','de una sola sustancia'],'No distinguimos sus componentes.',0,'Disoluciones'),
+MC('En azúcar disuelto en agua, el soluto es…','el azúcar',['el agua','la mezcla'],'El soluto es lo que se disuelve.',0,'Disoluciones'),
+MC('En las disoluciones acuosas, el disolvente es…','el agua',['la sal','el soluto'],'El agua es el disolvente.',0,'Disoluciones'),
+MC('Una disolución diluida…','contiene poco soluto disuelto',['contiene mucho soluto','no tiene soluto'],'Diluida: poco soluto.',0,'Disoluciones'),
+MC('Una disolución saturada…','contiene la máxima cantidad de soluto que se disuelve a esa temperatura',['no tiene soluto','tiene poco soluto'],'Es el límite de disolución.',0,'Disoluciones'),
+MC('Añadimos más soluto a una disolución saturada. ¿Qué ocurre?','Queda sin disolver en el fondo',['Se disuelve todo','Desaparece'],'Ya no admite más soluto.',0,'Disoluciones'),
+MC('El vinagre es ácido acético en agua al 3 % en masa. El disolvente es…','el agua',['el ácido acético','el vinagre'],'El soluto es el ácido acético.',0,'Disoluciones'),
+TF('Una disolución saturada nunca podrá disolver más soluto, cambien las condiciones que cambien.',0,'Puede disolver más si cambian las condiciones, como la temperatura.','Disoluciones'),
+MC('Una disolución al 15 % en volumen contiene…','15 mL de soluto por cada 100 mL de disolución',['15 g de soluto por litro','15 mL de agua por 100 mL'],'%V es mL de soluto en 100 mL de disolución.',0,'Disoluciones'),
+MC('Una concentración de 20 g/L significa…','20 g de soluto en cada litro de disolución',['20 g de disolvente en un litro','20 L de soluto'],'g/L = masa de soluto por litro de disolución.',0,'Disoluciones')];
+const B5=[MC('Un alumno usa °C directamente en la ley de Charles. ¿Qué error comete?','Debe usar kelvin',['Debe usar litros','No hay error'],'Con °C la proporción no es válida y puede salir un volumen negativo.',0,'Gases'),
+MC('Un recipiente rígido se calienta. ¿Por qué aumenta la presión?','Los choques son más frecuentes e intensos',['Las partículas se hacen mayores','El volumen aumenta'],'Gay-Lussac: V constante, más T, más P.',0,'Gases'),
+MC('Al expandir un gas a T constante, la presión baja porque…','las partículas chocan menos veces con las paredes',['cada partícula es más pequeña','las partículas pierden fuerza'],'Boyle-Mariotte: más espacio, menos choques por unidad de superficie.',0,'Gases'),
+MC('Un globo se encoge en la nevera. ¿Qué ley?','Charles',['Boyle-Mariotte','Gay-Lussac'],'P constante: baja T, baja V.',0,'Gases'),
+MC('Una bombona cerrada se calienta. ¿Qué ley?','Gay-Lussac',['Boyle-Mariotte','Charles'],'V constante: sube T, sube P.',0,'Gases'),
+MC('¿Qué magnitud es constante en la ley de Boyle-Mariotte?','La temperatura',['La presión','El volumen'],'Relaciona P y V.',0,'Gases'),
+MC('Para el % en masa, la masa de la disolución es…','soluto + disolvente',['solo el disolvente','solo el soluto'],'La masa total incluye ambos.',0,'Disoluciones'),
+MC('Antes de usar PV = nRT con V = 6560 mL, hay que…','pasarlo a litros',['pasarlo a m³','dejarlo en mL'],'R se da con litros: 6,56 L.',0,'Gases'),
+MC('Si una disolución se queda con soluto en el fondo aunque agitemos, está…','saturada',['diluida','concentrada'],'Ha llegado al límite de soluto.',0,'Disoluciones')];
+const N=(q,num,u,e,tag,h)=>({q,num,u,e,tag,h:h||['Identifica la ley o la fórmula y qué magnitud es constante.','Convierte a kelvin y a litros si hace falta.','Escribe la fórmula, despeja y sustituye.']});
+const gB=()=>{const P1=pick([1,1.5,2,3]),V1=pick([4,6,8,12]),V2=pick([2,3,4,6].filter(x=>x!=V1)),P2=P1*V1/V2;return N(`Un gas ocupa ${V1} L a ${fmt(P1)} atm. A temperatura constante pasa a ocupar ${V2} L. Calcula la presión final.`,P2,'atm',`Boyle-Mariotte: P₂ = P₁·V₁ / V₂ = ${fmt(P1)}·${V1} / ${V2} = ${fmt(P2)} atm`,'Gases')};
+const gB2=()=>{const P1=pick([1,1.5,2,3]),f=pick([2,3,4]),V1=pick([300,600,900,1200]),V2=V1*f/1000;return N(`Un gas ocupa ${V1} mL a ${fmt(P1)} atm. A temperatura constante la presión baja hasta ${fmt(P1/f)} atm. Calcula el volumen final en litros.`,V2,'L',`V₂ = P₁·V₁ / P₂ = ${fmt(P1)}·${V1} / ${fmt(P1/f)} = ${V1*f} mL = ${fmt(V2)} L`,'Gases')};
+const TP={27:[102,177,-48,327],127:[227,327,-73,27],17:[87,127,-83,227],47:[127,167,-47,227]};
+const gC=()=>{const t1=pick([27,127]),t2=pick(TP[t1]),V1=pick([2,3,4,6]),V2=V1*(t2+273)/(t1+273);return N(`Un globo contiene ${V1} L de gas a ${t1} °C. A presión constante se lleva a ${t2} °C. Calcula el volumen final.`,V2,'L',`Charles: T₁ = ${t1+273} K, T₂ = ${t2+273} K; V₂ = V₁·T₂/T₁ = ${V1}·${t2+273} / ${t1+273} = ${fmt(V2)} L`,'Gases')};
+const gG=()=>{const t1=pick([17,27,47]),t2=pick(TP[t1]),P1=pick([1,1.5,2,2.5]),P2=P1*(t2+273)/(t1+273);return N(`Un recipiente rígido contiene gas a ${fmt(P1)} atm y ${t1} °C. Se calienta hasta ${t2} °C. Calcula la presión final.`,P2,'atm',`Gay-Lussac: T₁ = ${t1+273} K, T₂ = ${t2+273} K; P₂ = P₁·T₂/T₁ = ${fmt(P1)}·${t2+273} / ${t1+273} = ${fmt(P2)} atm`,'Gases')};
+const gT=()=>{const T1=pick([300,400]),V1=pick([3,4,6]),V2=pick([4.5,6,8]),T2=T1*V2/V1;return N(`A presión constante, un gas ocupa ${V1} L a ${T1} K. ¿A qué temperatura, en °C, ocupará ${fmt(V2)} L?`,T2-273,'°C',`Charles: T₂ = T₁·V₂/V₁ = ${T1}·${fmt(V2)} / ${V1} = ${fmt(T2)} K = ${fmt(T2-273)} °C`,'Gases')};
+const gCo=()=>{const P1=pick([1,2]),V1=pick([3,4,6]),P2=pick([1.5,2,3]),t2=pick([127,227,-73]),V2=P1*V1*(t2+273)/(300*P2);return N(`Un gas ocupa ${V1} L a ${P1} atm y 27 °C. Pasa a ${fmt(P2)} atm y ${t2} °C. Calcula su nuevo volumen.`,V2,'L',`P₁V₁/T₁ = P₂V₂/T₂ → V₂ = ${P1}·${V1}·${t2+273} / (300·${fmt(P2)}) = ${fmt(V2)} L`,'Gases')};
+const VT=[[4.92,27],[8.2,127],[6.56,127],[9.84,27]];
+const gI1=()=>{const[V,t]=pick(VT),P=pick([1,1.5,2,3]),n=P*V/(.082*(t+273));return N(`Un recipiente de ${V} L contiene un gas ideal a ${fmt(P)} atm y ${t} °C. Calcula la cantidad de gas en moles.`,n,'mol',`T = ${t+273} K; n = PV/(RT) = ${fmt(P)}·${V} / (0,082·${t+273}) = ${fmt(n)} mol`,'Gases')};
+const gI2=()=>{const[V,t]=pick(VT),n=pick([.2,.3,.5]),P=n*.082*(t+273)/V;return N(`${fmt(n)} mol de gas ideal ocupan ${V} L a ${t} °C. Calcula su presión en atm.`,P,'atm',`P = nRT/V = ${fmt(n)}·0,082·${t+273} / ${V} = ${fmt(P)} atm`,'Gases')};
+const gI3=()=>{const t=pick([27,127]),n=pick([.25,.5]),P=pick([1.5,2,3]),V=n*.082*(t+273)/P*1000;return N(`${fmt(n)} mol de gas ideal están a ${fmt(P)} atm y ${t} °C. Calcula su volumen en mL.`,V,'mL',`V = nRT/P = ${fmt(n)}·0,082·${t+273} / ${fmt(P)} = ${fmt(V/1000)} L = ${fmt(V)} mL`,'Gases')};
+const gK=()=>{const t=pick([-23,0,17,27,47,87,127]);return Math.random()<.5?N(`Expresa ${t} °C en kelvin.`,t+273,'K',`T(K) = ${t} + 273 = ${t+273} K`,'Gases',['Suma 273.','T(K) = t(°C) + 273.','Suma 273 al valor en °C.']):N(`Expresa ${t+273} K en °C.`,t,'°C',`t(°C) = ${t+273} − 273 = ${t} °C`,'Gases',['Resta 273.','t(°C) = T(K) − 273.','Resta 273 al valor en K.'])};
+const dC=()=>{const m=pick([6,12,15,18,24,30]),V=pick([150,200,250,300,400,500,600]),c=m*1000/V;return N(`Se disuelven ${m} g de sal hasta obtener ${V} mL de disolución. Calcula su concentración en g/L.`,c,'g/L',`V = ${V/1000} L; c = ${m} / ${V/1000} = ${fmt(c)} g/L`,'Disoluciones')};
+const dM=()=>{const c=pick([20,24,30,32,40,50]),V=pick([150,250,300,500,750]);return N(`Una disolución tiene una concentración de ${c} g/L. ¿Cuántos gramos de soluto contiene una muestra de ${V} mL?`,c*V/1000,'g',`m = c·V = ${c}·${V/1000} = ${fmt(c*V/1000)} g`,'Disoluciones')};
+const dV=()=>{const c=pick([20,30,40,60]),m=pick([3,6,9,12,15]);return N(`Una disolución tiene ${c} g/L. ¿Qué volumen de disolución, en mL, contiene ${m} g de soluto?`,m/c*1000,'mL',`V = m / c = ${m} / ${c} = ${fmt(m/c)} L = ${fmt(m/c*1000)} mL`,'Disoluciones')};
+const dPM=()=>{const tot=pick([100,200,250,400,500]),ms=tot*pick([2,4,5,8,10,12,15,20])/100;return N(`Se mezclan ${ms} g de azúcar con ${tot-ms} g de agua. Calcula el porcentaje en masa de la disolución.`,ms/tot*100,'%',`m disolución = ${ms} + ${tot-ms} = ${tot} g; %m = ${ms}/${tot}·100 = ${fmt(ms/tot*100)} %`,'Disoluciones')};
+const dPM2=()=>{const tot=pick([150,200,250,350,400,500]),p=pick([3,5,8,10,12,15]);return N(`Una disolución de ${tot} g tiene un ${p} % en masa de soluto. Calcula la masa de soluto.`,tot*p/100,'g',`m soluto = ${p}·${tot}/100 = ${fmt(tot*p/100)} g`,'Disoluciones')};
+const dPV=()=>{const Vt=pick([200,250,300,400,500]),p=pick([5,10,12,15,20]),Vs=Vt*p/100;return N(`Se prepara una disolución con ${fmt(Vs)} mL de alcohol y agua suficiente para obtener ${Vt} mL de disolución. Calcula su porcentaje en volumen.`,p,'%',`%V = ${fmt(Vs)}/${Vt}·100 = ${p} %`,'Disoluciones')};
+const dPV2=()=>{const Vt=pick([200,250,400,500]),p=pick([5,10,12,15]);return N(`¿Cuántos mL de alcohol se necesitan para preparar ${Vt} mL de disolución al ${p} % en volumen?`,Vt*p/100,'mL',`V soluto = ${p}·${Vt}/100 = ${fmt(Vt*p/100)} mL`,'Disoluciones')};
+const G=[gB,gB2,gC,gG,gT,gCo,gI1,gI2,gI3,dC,dM,dV,dPM,dPM2,dPV,dPV2,gK];
+function build(m){if(m==0)return[...B0,...Array.from({length:4},gK)];if(m==1)return Array.from({length:24},(_,i)=>G[i%6]());if(m==2)return Array.from({length:15},(_,i)=>G[6+i%3]());if(m==3)return B3;if(m==4)return Array.from({length:21},(_,i)=>G[9+i%7]());if(m==5)return[...B5,...[3,2,5,7,10,12].map(i=>G[i]())];return[]}
+const S={home:1,m:0,t:0,i:0,sel:null,val:'',fb:null,hint:0,sol:0,done:{},items:{},fin:null,sk:0,side:0,menu:0,hl:null,rm:0,fsMsg:0};
+try{Object.assign(S.done,JSON.parse(localStorage.getItem('fyqd3')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('fyqd3',JSON.stringify(S.done))}catch(e){}};
+function resetAll(){S.cf=1;render()}
+function doReset(){S.cf=0;S.done={};S.items={};S.fin=null;S.sk=0;S.side=0;S.menu=0;S.tp=-50;S.gv=0;S.wide=0;S.m=0;S.t=0;S.i=0;GM.mode=0;GM.V=60;GM.T=300;GM.pred=null;GM.res='';GM.pts=[];CV.a='';CV.b='';CV.c='';try{localStorage.removeItem('fyqd3')}catch(e){}rs();S.home=1;render()}
+const items=m=>m==6?(S.fin?S.fin.list:[]):(S.items[m]||(S.items[m]=build(m)));
+const rs=()=>{S.sel=null;S.val='';S.fb=null;S.hint=0;S.sol=S.sk;S.hl=null};
+const go=(m,t)=>{S.m=m;S.t=t;S.i=0;S.home=0;S.menu=0;rs();render()};
+function nav(d){const m=S.m;if(S.home)return;
+if(S.t==0){S.i+=d;if(S.i<0){S.i=0}if(S.i>=L[m].length){S.t=m==0?2:1;S.i=0}}
+else if(S.t==1){if(d<0){S.t=0;S.i=L[m].length-1}else{S.t=2;S.i=0}}
+else{const n=items(m).length;S.i+=d;if(S.i<0){if(m==0){S.t=0;S.i=L[0].length-1}else{S.t=1;S.i=0}}if(S.i>=n){S.i=n-1;if(S.fin&&m==6)S.fin.end=1}}
+rs();render()}
+function check(){const q=items(S.m)[S.i];if(!q)return;let ok;
+if(q.o){if(S.sel==null){S.fb={ok:0,m:'Elige una opción.'};return render()}ok=S.sel==q.a}
+else{const v=parseFloat(String(S.val).replace(',','.'));if(isNaN(v)){S.fb={ok:0,m:'Escribe un número.'};return render()}ok=Math.abs(v-q.num)<=Math.max(Math.abs(q.num)*.015,.005)}
+S.fb={ok,m:ok?'¡Correcto! '+q.e:'No es correcto. Revisa y reinténtalo o pide una pista.'};
+if(ok){S.done[S.m+':'+S.i+(S.m==6?':f':'')]=1;save()}if(S.fin&&S.m==6){S.fin.r[S.i]=S.fin.r[S.i]||ok?1:0}render()}
+const hint=()=>{S.hint=Math.min(3,S.hint+1);render()},sol=()=>{S.sol=1;render()};
+function fs(){const d=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(d.requestFullscreen)d.requestFullscreen().catch(()=>{S.fsMsg=1;render()});else{S.fsMsg=1;render()}}
+document.addEventListener('fullscreenchange',()=>render());
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.key==='ArrowRight')nav(1);if(e.key==='ArrowLeft')nav(-1)});
+let stop=null;const clean=()=>{if(stop){stop();stop=null}};
+const cnt=m=>Object.keys(S.done).filter(k=>k.startsWith(m+':')&&k.split(':').length==2).length;
+function qHTML(q){let h='';if(q.svg)h+=`<div style="text-align:center">${q.svg}</div>`;h+=`<h2>${q.q}</h2>`;
+if(q.o)h+=q.o.map((o,i)=>`<button class="opt ${S.sel===i?'on':''}" onclick="S.sel=${i};S.fb=null;if(${i}==items(S.m)[S.i].a)check();else render()">${'ABCD'[i]}. ${o}</button>`).join('');
+else h+=`<div style="display:flex;gap:8px;align-items:center"><input id=ans inputmode=decimal value="${S.val}" oninput="S.val=this.value" onkeydown="if(event.key==='Enter')check()" placeholder="Respuesta"><b>${q.u}</b></div>`;
+if(S.hint)h+=`<div class="fb1 hn">💡 ${q.h.slice(0,S.hint).map((x,i)=>`Pista ${i+1}: ${x}`).join('<br>')}</div>`;
+if(S.fb)h+=`<div class="fb1 ${S.fb.ok?'ok':'ko'}">${S.fb.m}</div>`;
+if(S.sol)h+=`<div class="fb1 hn">✅ Solución: ${q.o?q.o[q.a]+'. ':''}${q.e}</div>`;return h}
+function practice(){const m=S.m;
+if(m==6&&!S.fin){return`<div class=pn style="flex:1;display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center"><h2>Elige tu reto</h2><div><button class=g onclick="mkFin(6)">RETO RÁPIDO · 6</button> <button onclick="mkFin(12)">RETO NORMAL · 12</button> <button class=o onclick="mkFin(20)">RETO COMPLETO · 20</button></div></div>`}
+if(m==6&&S.fin.end){const f=S.fin,sc=Object.values(f.r).filter(x=>x).length,bad={};f.list.forEach((q,i)=>{if(!f.r[i])bad[q.tag]=1});return`<div class=pn style="flex:1;text-align:center"><h2>Resultado: ${sc} / ${f.list.length}</h2><p>${Object.keys(bad).length?'Conviene repasar: <b>'+Object.keys(bad).join(', ')+'</b>':'¡Perfecto! Nada que repasar.'}</p><button onclick="S.fin=null;S.i=0;rs();render()">Nueva ronda</button></div>`}
+const q=items(m)[S.i];if(!q)return'';const n=items(m).length,g=q.g!=null;
+return`<div style="font-size:.85em;opacity:.8">Reto ${S.i+1} / ${n} ${m==4?'· problemas generados al azar':''}</div><div class=two>${g?`<div class=pn style="flex:55">${gsvg(q.g,null,0)}</div>`:''}<div class=pn style="flex:${g?45:1}">${qHTML(q)}</div></div>`}
+function mkFin(n){const pool=[...B0,...B3,...B5,...Array.from({length:16},(_,i)=>G[i]())];S.fin={list:sh(pool).slice(0,n),r:{},end:0};S.i=0;rs();render()}
+const C=document.getElementById('app');
+function render(){clean();const m=S.m,fsOn=!!document.fullscreenElement;let tot=Object.keys(S.done).length;
+let top=`<div class=bar><span class=logo>⚗️ MISIÓN FYQ</span><span>${S.home?'':MI[m]+' '+MN[m]}</span><span class=sp></span><span>⭐ ${tot}</span><button class=n onclick="S.home=1;S.menu=0;render()">🏠</button><button class=n onclick="S.menu=!S.menu;render()">Misiones</button><button class=n onclick="S.side=!S.side;render()">👩‍🏫 Profesor</button><button onclick="fs()">⛶ ${fsOn?'SALIR':'PANTALLA COMPLETA'}</button></div>`;
+let bd='';
+if(S.home){bd=`<div style="text-align:center"><h2 style="font-size:2em;margin:0">GASES Y DISOLUCIONES · 3.º ESO</h2><i>Aprende. Experimenta. Razona. Calcula. Supera el reto.</i><div style="margin-top:6px"><button class=g onclick="go(0,0)">COMENZAR</button> <button onclick="S.menu=1;render()">ELEGIR MISIÓN</button> <button class=n onclick="resetAll()">🔄 REINICIAR TODO</button></div></div><div class=home>${MN.map((n,i)=>`<div class="pn mc" tabindex=0 role=button onclick="go(${i},0)" onkeydown="if(event.key==='Enter')go(${i},0)"><span>${MI[i]}</span><b>${i+1}. ${n}</b><small>${cnt(i)} retos completados</small></div>`).join('')}</div>`}
+else{const tabs=`<div class=tabs>${['APRENDE','EXPERIMENTA','PRACTICA'].map((x,i)=>m==0&&i==1?'':`<button class="${S.t==i?'on':''}" onclick="go(${m},${i})">${x}</button>`).join('')}</div>`;let b='';
+if(S.t==0){const p=L[m][S.i];b=`<div class=two><div class=pn style="flex:${p.c||p.gv?45:1}"><h2>${p.t}</h2>${p.x}<small>Página ${S.i+1}/${L[m].length}</small></div>${p.gv?`<div class=pn style="flex:55">${gsvg(0,S.hl,1)}<div class="fb1 hn">${S.hl!=null?SEGI[S.hl]:'Pulsa un tramo de la gráfica.'}</div></div>`:p.c?`<div class=pn style="flex:55"><div class=cards>${cards(p.c)}</div></div>`:''}</div>`}
+else if(S.t==1)b=xp(m);else b=practice();bd=tabs+b}
+let bot=S.home?'<div class="bar b"></div>':`<div class="bar b"><button class=n onclick="nav(-1)">⬅ Anterior</button><button class=o onclick="hint()" ${S.t==2&&items(m)[S.i]&&!(m==6&&S.fin&&S.fin.end)?'':'disabled'}>💡 Pista</button><button class=g onclick="check()" ${S.t==2&&items(m)[S.i]&&!(m==6&&S.fin&&S.fin.end)?'':'disabled'}>✔ Comprobar</button><button class=n onclick="sol()" ${S.t==2&&items(m)[S.i]?'':'disabled'}>👁 Ver solución</button><button onclick="nav(1)">Siguiente ➡</button></div>`;
+let ov='';if(S.menu)ov=`<div class=side style="left:0;right:auto;border-left:0;border-right:2px solid var(--t)"><h2>Misiones</h2>${MN.map((n,i)=>`<button class=n onclick="go(${i},0)">${MI[i]} ${i+1}. ${n}</button>`).join('')}</div>`;
+if(S.side)ov+=`<div class=side><h2>Panel del profesor</h2><button onclick="S.sk=!S.sk;S.sol=S.sk;render()">${S.sk?'Ocultar':'Mostrar'} soluciones automáticamente</button><button onclick="S.items={};S.fin=null;S.i=0;rs();render()">Generar otra ronda</button><button onclick="S.rm=!S.rm;document.body.classList.toggle('rm',S.rm);render()">Animaciones: ${S.rm?'reducidas':'normales'}</button><button onclick="Object.keys(S.done).forEach(k=>{if(k.startsWith(S.m+':'))delete S.done[k]});save();S.i=0;rs();render()">Reiniciar misión</button><button onclick="resetAll()">Reiniciar todo</button><div class="fb1 hn"><b>Fórmulas</b><br>P₁V₁ = P₂V₂ · V₁/T₁ = V₂/T₂ · P₁/T₁ = P₂/T₂<br>PV = nRT (R = 0,082)<br>T(K) = t(°C) + 273<br>%m, %V, c = m/V</div><div class="fb1 hn"><b>Progreso</b><br>${MN.slice(0,6).map((n,i)=>`${n}: ${cnt(i)}`).join('<br>')}</div></div>`;
+if(S.cf)ov+=`<div style="position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center"><div class=pn style="background:#0d2145;text-align:center;max-width:420px"><h2>¿Reiniciar todo?</h2><p>Se borrarán las estrellas, los retos completados y las rondas generadas.</p><button class=o onclick="doReset()">Sí, reiniciar todo</button> <button class=n onclick="S.cf=0;render()">Cancelar</button></div></div>`;
+C.innerHTML=top+`<main>${bd}${S.fsMsg?'<small style="color:var(--o)">Tu navegador no permite pantalla completa aquí: abre el artefacto en ventana propia o pulsa F11.</small>':''}</main>`+bot+ov;
+if(S.after){const f=S.after;S.after=null;f()}}
+const GM={mode:0,V:60,T:300,pred:null,res:'',V0:60,T0:300,ps:null,pts:[]};
+function xp(m){if(m==1)return xGas();if(m==2)return xCalc('g');if(m==3)return xDis();if(m==4)return xCalc('c');return`<div class=pn style="flex:1"><h2>Todas las tarjetas</h2><div class=cards style="grid-template-columns:repeat(7,1fr)">${cards(Object.keys(CD))}</div></div>`}
+function dsv(g){const c=Math.min(g,36)/36,ex=Math.max(0,g-36);return`<svg viewBox="0 0 300 260" style="height:100%;width:100%"><rect x="80" y="40" width="140" height="190" rx="10" fill="none" stroke="#fff" stroke-width="4" /><rect x="84" y="90" width="132" height="138" fill="#3685F5" opacity="${.15+c*.8}" /><rect x="84" y="${228-ex*1.2}" width="132" height="${ex*1.2}" fill="#fff" opacity=".9" /><text x="150" y="25" fill="#fff" text-anchor="middle" font-size="16">100 mL de agua</text></svg>`}
+const dsl=g=>g==0?'agua pura':g<10?'disolución DILUIDA':g<36?'disolución CONCENTRADA':g==36?'disolución SATURADA (límite)':'SATURADA con exceso sin disolver';
+function dis(v){S.sg=+v;document.getElementById('dsv').innerHTML=dsv(S.sg);document.getElementById('dsl').textContent=S.sg+' g: '+dsl(S.sg)}
+function xDis(){const g=S.sg||0;return`<div class=two><div class=pn style="flex:55" id=dsv>${dsv(g)}</div><div class=pn style="flex:45"><h2>Añade soluto</h2><p>Echa sal en 100 mL de agua. A esa temperatura se disuelven como máximo 36 g.</p><p>Predice: ¿a partir de cuántos gramos quedará sal sin disolver?</p><input type=range min=0 max=60 value=${g} oninput="dis(this.value)"><p class=big id=dsl>${g} g: ${dsl(g)}</p></div></div>`}
+const CV={x:'n',k:'m',a:'',b:'',c:''};
+const GI={n:['P (atm)','V (L)','T (°C)'],P:['n (mol)','V (L)','T (°C)'],V:['n (mol)','P (atm)','T (°C)'],T:['P (atm)','V (L)','n (mol)']};
+function xCalc(w){const f=s=>parseFloat(String(s).replace(',','.')),A=f(CV.a),B=f(CV.b),C=f(CV.c),inp=(v,p)=>`<input style="margin-top:6px" placeholder="${p}" value="${CV[v]}" oninput="CV.${v}=this.value">`;let h='',r='';
+if(w=='g'){const u=CV.x,R=.082;h=['n','P','V','T'].map(x=>`<button class="${u==x?'':'n'}" onclick="CV.x='${x}';render()">Calcular ${x}</button>`).join(' ')+'<p class=big>P·V = n·R·T</p>'+GI[u].map((p,i)=>inp('abc'[i],p)).join('');
+if(![A,B,C].some(isNaN)){const x=u=='n'?A*B/(R*(C+273)):u=='P'?A*R*(B+0)*0:0;let v;if(u=='n')v=A*B/(R*(C+273));if(u=='P')v=A*R*(C+273)/B;if(u=='V')v=A*R*(C+273)/B;if(u=='T')v=A*B/(C*R)-273;r=`${u} = ${fmt(v)} ${{n:'mol',P:'atm',V:'L',T:'°C'}[u]}`}}
+else{const k=CV.k;h=[['m','%m'],['v','%V'],['g','g/L']].map(x=>`<button class="${k==x[0]?'':'n'}" onclick="CV.k='${x[0]}';render()">${x[1]}</button>`).join(' ')+`<p class=big>${{m:'%m = m soluto / m disolución × 100',v:'%V = V soluto / V disolución × 100',g:'c = m soluto / V disolución'}[k]}</p>`+inp('a',{m:'m soluto (g)',v:'V soluto (mL)',g:'m soluto (g)'}[k])+inp('b',{m:'m disolución (g)',v:'V disolución (mL)',g:'V disolución (mL)'}[k]);
+if(!isNaN(A)&&!isNaN(B))r=k=='g'?`c = ${fmt(A/(B/1000))} g/L`:`${k=='m'?'%m':'%V'} = ${fmt(A/B*100)} %`}
+return`<div class=two><div class=pn style="flex:1"><h2>${w=='g'?'Calculadora de gases ideales':'Calculadora de concentración'}</h2>${h}<br><button class=g style="margin-top:8px" onclick="render()">Calcular</button>${r?`<div class="fb1 ok big">${r}</div>`:''}</div></div>`}
+
+function gasVals(){const g=GM;if(g.mode==0){g.T=300}if(g.mode==1){g.V=60*g.T/300}if(g.mode==2){g.V=60}g.P=100*(g.T/300)*(60/g.V)}
+function xGas(){gasVals();const g=GM,ct=['Temperatura','Presión','Volumen'][g.mode],sl=g.mode==0?'volumen':'temperatura',dep=['presión','volumen','presión'][g.mode],val=g.mode==0?g.V:g.T,mn=g.mode==0?30:250,mx=g.mode==0?100:450;
+S.after=simG;return`<div class=two><div class=pn style="flex:55"><canvas id=cv width=420 height=400></canvas></div><div class=pn style="flex:45"><div class=tabs>${['BOYLE','CHARLES','GAY-LUSSAC'].map((x,i)=>`<button class="${g.mode==i?'on':''}" onclick="GM.mode=${i};GM.V=60;GM.T=300;GM.pred=null;GM.res='';GM.pts=[];render()">${x}</button>`).join('')}</div>
+<p>Constante: <b>${ct}</b>. ¿Qué crees que ocurrirá con la <b>${dep}</b> si AUMENTAS el ${sl}?</p><div>${['Aumentará','Disminuirá','Permanecerá'].map((x,i)=>`<button class="${g.pred===i?'':'n'}" onclick="GM.pred=${i};GM.V0=GM.V;GM.T0=GM.T;GM.res='';render()">${x}</button>`).join(' ')}</div>
+<p>Control de ${sl}:</p><input type=range min=${mn} max=${mx} value=${val} ${g.pred==null?'disabled':''} oninput="gIn(this.value)"><p>P: <b id=iP></b> · V: <b id=iV></b> · T: <b id=iT></b></p><div id=gr></div><canvas id=gc width=240 height=130 style="height:130px;width:240px"></canvas></div></div>`}
+function gIn(v){const g=GM;if(g.mode==0)g.V=+v;else g.T=+v;gasVals();g.pts.push([g.mode==0?g.V:g.T,g.mode==1?g.V:g.P]);if(g.pts.length>80)g.pts.shift();
+const base=g.mode==0?g.V0:g.T0;const cur=g.mode==0?g.V:g.T;const el=document.getElementById('gr');
+if(cur>base&&g.pred!=null){const real=g.mode==1?(g.V>60*g.T0/300?0:2):(g.mode==0?(g.P<100*(g.T/300)*(60/g.V0)?1:2):(g.P>100*(g.T0/300)?0:2));const ok=real==g.pred;g.res=(ok?'✔ Predicción correcta. ':'✘ Tu predicción no era correcta. ')+['Boyle: menos espacio, más choques: P sube; más espacio, P baja.','Charles: más temperatura, partículas más rápidas: el volumen aumenta.','Gay-Lussac: más temperatura, más choques y más fuertes: la presión aumenta.'][g.mode]}
+else g.res='Aumenta el control para comprobar tu predicción.';if(el)el.innerHTML=`<div class="fb1 hn">${g.res}</div>`}
+function simG(){const cv=document.getElementById('cv');if(!cv)return;const c=cv.getContext('2d'),g=GM;if(!g.ps||g.ps.length!=30)g.ps=Array.from({length:30},()=>({x:Math.random()*300+40,y:Math.random()*100+260,a:Math.random()*6.28}));
+let id;const f=()=>{gasVals();const top=360-g.V*3.2,sp=Math.sqrt(g.T/300)*2.5,arr=(v,v0)=>v>v0*1.02?'↑':v<v0*.98?'↓':'=';
+const sv=(i,t)=>{const e=document.getElementById(i);if(e)e.textContent=t};sv('iP',arr(g.P,100)+' '+(g.P/100).toFixed(2)+' atm');sv('iV',arr(g.V,60)+' '+(g.V/10).toFixed(1)+' L');sv('iT',arr(g.T,300)+' '+Math.round(g.T)+' K');
+c.clearRect(0,0,420,400);c.strokeStyle='#fff';c.lineWidth=4;c.strokeRect(40,40,340,320);c.fillStyle='#8fa6d0';c.fillRect(40,top-10,340,14);c.fillRect(205,20,10,top-20);
+c.fillStyle='#20C7B5';g.ps.forEach(p=>{p.x+=Math.cos(p.a)*sp;p.y+=Math.sin(p.a)*sp;if(p.x<48||p.x>372){p.a=Math.PI-p.a}if(p.y<top+6||p.y>352){p.a=-p.a}p.x=Math.min(372,Math.max(48,p.x));p.y=Math.min(352,Math.max(top+6,p.y));c.beginPath();c.arc(p.x,p.y,7,0,7);c.fill()});
+const gc=document.getElementById('gc');if(gc){const q=gc.getContext('2d');q.clearRect(0,0,240,130);q.strokeStyle='#fff';q.strokeRect(10,5,220,110);q.fillStyle='#F3A847';const r=g.mode==0?[30,100,0,250]:[250,450,g.mode==1?20:20,g.mode==1?120:400];g.pts.forEach(p=>{const X=10+(p[0]-r[0])/(r[1]-r[0])*220,Yv=g.mode==0?p[1]:g.mode==1?p[1]:p[1];const Y=g.mode==1?115-(Yv-20)/(110-20)*100:115-Math.min(1,Yv/(g.mode==0?250:200))*105;q.fillRect(X-2,Y-2,4,4)});q.fillStyle='#fff';q.font='11px sans-serif';q.fillText(['P frente a V','V frente a T','P frente a T'][g.mode],14,126)}
+id=requestAnimationFrame(f)};f();stop=()=>cancelAnimationFrame(id)}
+
+render();
+</script></body></html>
